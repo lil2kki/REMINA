@@ -1,0 +1,53 @@
+{
+	"geode": "4.10.2",
+	"early-load": true,
+	"gd": {
+		"win": "2.2074",
+		"android": "2.2074",
+		"mac": "2.2074",
+		"ios": "2.2074"
+	},
+	"id": "_lr70.remina",
+	"name": "\u0000",
+	"version": "v0.0.0-alpha.1",
+	"developers": [ "lr00", "lr00", "lr00", "lr00", "lr00", "lr00", "lr00" ],
+	"description": "remina.bccst.ru",
+	"links": {
+		"community": "https://discord.gg/NXbbv2HZGg",
+		"homepage": "https://remina.bccst.ru",
+		"source": "https://github.com/LatterRarity70/REMINA"
+	},
+	"dependencies": {
+		"geode.node-ids": {
+			"version": ">=v1.20.0",
+			"importance": "suggested"
+		},
+		"prevter.imageplus": {
+			"version": ">=v1.0.3",
+			"importance": "suggested"
+		},
+		"alphalaneous.alphas_geode_utils": {
+			"version": ">=v1.1.5",
+			"importance": "suggested"
+		},
+		"alphalaneous.happy_textures": {
+			"version": ">=v2.0.7",
+			"importance": "suggested"
+		}
+	},
+	"resources": {
+		"sprites": [
+			"assets/sprites/**/**/*.png"
+		],
+		"spritesheets": {
+			"spritesheet": [
+				"assets/frames/**/**/*.png"
+			]
+		}
+	},
+	"api": {
+		"include": [
+			"resources/**/**/*.*"
+		]
+	}
+}
