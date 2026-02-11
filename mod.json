@@ -27,7 +27,7 @@
 			"importance": "suggested"
 		},
 		"alphalaneous.alphas_geode_utils": {
-			"version": ">=v1.1.5",
+			"version": "<=v1.1.8",
 			"importance": "suggested"
 		},
 		"alphalaneous.happy_textures": {
