@@ -349,6 +349,8 @@ inline void SetupObjects() {
 		UNIQ_ID("plr-normal-mode"), "plr-normal-mode.png",
 		[](EffectGameObject* trigger, GJBaseGameLayer* game, int p1, gd::vector<int> const* p2)
 		{
+			if (!game) return;
+			if (auto a = game->m_uiLayer) a->togglePlatformerMode(false);
 			if (auto a = game->m_player1) a->m_isPlatformer = false;
 			if (auto a = game->m_player2) a->m_isPlatformer = false;
 		}
@@ -358,6 +360,8 @@ inline void SetupObjects() {
 		UNIQ_ID("plr-platformer-mode"), "plr-platformer-mode.png",
 		[](EffectGameObject* trigger, GJBaseGameLayer* game, int p1, gd::vector<int> const* p2)
 		{
+			if (!game) return;
+			if (auto a = game->m_uiLayer) a->togglePlatformerMode(true);
 			if (auto a = game->m_player1) a->m_isPlatformer = true;
 			if (auto a = game->m_player2) a->m_isPlatformer = true;
 		}
