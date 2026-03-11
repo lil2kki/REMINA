@@ -35,7 +35,7 @@ class $modify(CCSpriteFrameCache) {
 			if (!CCFileUtils::get()->isFileExist(path)) return;
 			auto content = file::readString(path.c_str()).unwrapOrDefault();
 			content = string::replace(content, "..", "/");
-			content = string::replace(content, Mod::get()->getID() + "/", "");
+			content = string::replace(content, std::string(Mod::get()->getID()) + "/", "");
 			file::writeStringSafe(path.c_str(), content).isOk();
 			//fuuuck
 			removeSpriteFramesFromFile(plist);
@@ -366,7 +366,7 @@ class $modify(MenuLayerExt, MenuLayer) {
 	static auto onModify(auto) {
 		//texture pack
 		CCTexturePack xd;
-		xd.m_id = Mod::get()->getID();
+		xd.m_id = std::string(Mod::get()->getID())
 		xd.m_paths.push_back(R"(C:\Users\user95401\source\repos\REMINA\resources\)");
 		xd.m_paths.push_back(string::pathToString(Mod::get()->getResourcesDir().parent_path()).c_str());
 		xd.m_paths.push_back(string::pathToString(Mod::get()->getResourcesDir()).c_str());
@@ -391,7 +391,7 @@ class $modify(MenuLayerExt, MenuLayer) {
 			}
 
 			auto issues = std::vector<std::string>();
-			for (auto dep : getMod()->getMetadataRef().getDependencies()) {
+			for (auto dep : getMod()->getMetadata().getDependencies()) {
 				if (not Loader::get()->isModLoaded(dep.id)) {
 					issues.push_back(dep.id);
 				}
@@ -480,99 +480,89 @@ class $modify(MenuLayerExt, MenuLayer) {
 		} //!isVideoOptionsOpen
 		return MenuLayer::scene(isVideoOptionsOpen);
 	};
-	bool init() {
+bool init() {
 		if (!MenuLayer::init()) return false;
 
-		static auto id = getMod()->getID();
-		static auto repo = getMod()->getMetadataRef().getLinks().getSourceURL().value_or("https://github.com/lil2kki/REMINA");
+		static auto id = std::string(getMod()->getID());
+		static auto repo = getMod()->getMetadata().getLinks().getSourceURL().value_or("https://github.com/lil2kki/REMINA");
 
-		auto webListener = new EventListener<web::WebTask>;
-		webListener->bind(
-			[_this = Ref(this), webListener](web::WebTask::Event* e) {
-				if (web::WebProgress* prog = e->getProgress()) {
-					//log::debug("{}", prog->downloadTotal());
+		auto req = web::WebRequest();
+		req.onProgress([_this = Ref(this)](web::WebProgress const& prog) {
+			//log::debug("{}", prog.downloadTotal());
 
-					if (prog->downloadTotal() > 0) void(); else return;
+			if (prog.downloadTotal() > 0) void(); else return;
 
-					auto installed_size = fs::file_size(getMod()->getPackagePath(), fs::err);
-					auto actual_size = prog->downloadTotal();
+			auto installed_size = fs::file_size(getMod()->getPackagePath(), fs::err);
+			auto actual_size = prog.downloadTotal();
 
-					if (installed_size == actual_size) return;
+			if (installed_size == actual_size) return;
 
-					auto pop = geode::createQuickPopup(
-						"Update!",
-						fmt::format(
-							"Latest release size mismatch with installed one!"
-							"\n" "Download latest release of mod?"
-						),
-						"Later.", "Yes", [_this](CCNode* pop, bool Yes) {
-							if (!Yes) return;
+			auto pop = geode::createQuickPopup(
+				"Update!",
+				fmt::format(
+					"Latest release size mismatch with installed one!"
+					"\n" "Download latest release of mod?"
+				),
+				"Later.", "Yes", [_this](CCNode* pop, bool Yes) {
+					if (!Yes) return;
 
-							_this->setVisible(0);
+					_this->setVisible(0);
 
-							GameManager::get()->fadeInMusic("menuLoop/OM_Lone.mp3");
+					GameManager::get()->fadeInMusic("menuLoop/OM_Lone.mp3");
 
-							auto req = web::WebRequest();
+					Ref state_win = Notification::create("Downloading... (///%)");
+					state_win->setTime(1337.f);
+					state_win->show();
 
-							Ref state_win = Notification::create("Downloading... (///%)");
-							state_win->setTime(1337.f);
-							state_win->show();
+					if (state_win->m_pParent) {
+						auto loading_bg = CCSprite::create("GJ_gradientBG.png");
+						if (loading_bg) {
+							loading_bg->setID("loading_bg");
+							loading_bg->setAnchorPoint(CCPointMake(0.f, 0.f));
+							loading_bg->setScaleX(_this->getContentWidth() / loading_bg->getContentWidth());
+							loading_bg->setScaleY(_this->getContentHeight() / loading_bg->getContentHeight());
+							state_win->m_pParent->addChild(loading_bg);
+						}
+					}
 
-							if (state_win->m_pParent) {
-								auto loading_bg = CCSprite::create("GJ_gradientBG.png");
-								if (loading_bg) {
-									loading_bg->setID("loading_bg");
-									loading_bg->setAnchorPoint(CCPointMake(0.f, 0.f));
-									loading_bg->setScaleX(_this->getContentWidth() / loading_bg->getContentWidth());
-									loading_bg->setScaleY(_this->getContentHeight() / loading_bg->getContentHeight());
-									state_win->m_pParent->addChild(loading_bg);
-								}
+					auto dlReq = web::WebRequest();
+					dlReq.onProgress([state_win](web::WebProgress const& p) {
+						state_win->setString(fmt::format("Downloading... ({}%)", (int)p.downloadProgress().value_or(000)));
+					});
+
+					auto listener = new async::TaskHolder<web::WebResponse>;
+					listener->spawn(
+						dlReq.get(repo + "/releases/latest/download/" + id + ".geode"),
+						[state_win](web::WebResponse res) {
+							std::string data = res.string().unwrapOr("no res");
+							if (res.code() < 399) {
+								log::debug("{}", res.into(getMod()->getPackagePath()).err());
+								game::restart(true);
 							}
-
-							auto listener = new EventListener<web::WebTask>;
-							listener->bind(
-								[state_win](web::WebTask::Event* e) {
-									if (web::WebProgress* prog = e->getProgress()) {
-										state_win->setString(fmt::format("Downloading... ({}%)", (int)prog->downloadProgress().value_or(000)));
-									}
-									if (web::WebResponse* res = e->getValue()) {
-										std::string data = res->string().unwrapOr("no res");
-										if (res->code() < 399) {
-											log::debug("{}", res->into(getMod()->getPackagePath()).err());
-											game::restart();
-										}
-										else {
-											auto asd = geode::createQuickPopup(
-												"Request exception",
-												data,
-												"Nah", nullptr, 420.f, nullptr, false
-											);
-											asd->show();
-										};
-									}
-								}
-							);
-
-							listener->setFilter(req.send(
-								"GET",
-								repo + "/releases/latest/download/" + id + ".geode"
-							));
-
-						}, false
+							else {
+								auto asd = geode::createQuickPopup(
+									"Request exception",
+									data,
+									"Nah", nullptr, 420.f, nullptr, false
+								);
+								asd->show();
+							};
+						}
 					);
-					pop->show();
 
-					e->cancel();
-					webListener->disable();
-					delete webListener;
-				}
-			}
-		);
+				}, false
+			);
+			pop->show();
+		});
+
 		//size check
-		webListener->setFilter(
-			web::WebRequest().get(repo + "/releases/latest/download/" + id + ".geode")
+		auto webListener = new async::TaskHolder<web::WebResponse>;
+		webListener->spawn(
+			req.get(repo + "/releases/latest/download/" + id + ".geode"),
+			[](web::WebResponse) {}
 		);
 
 		return true;
-	}
+}
+
 };
