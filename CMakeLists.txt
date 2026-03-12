@@ -26,10 +26,10 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     _WINSOCK_DEPRECATED_NO_WARNINGS
 )
 
-#target_compile_options(${PROJECT_NAME} PRIVATE 
-#-Wno-implicit-const-int-float-conversion 
-#-Wno-undefined-bool-conversion
-#)
+target_compile_options(${PROJECT_NAME} PRIVATE 
+-Wno-implicit-const-int-float-conversion 
+-Wno-undefined-bool-conversion
+)
 
 if (NOT DEFINED ENV{GEODE_SDK})
     message(WARNING "Unable to find Geode SDK! Please define GEODE_SDK environment variable to point to Geode")
