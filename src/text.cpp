@@ -134,7 +134,7 @@ class $modify(GDL_CCLabelBMFont, CCLabelBMFont) {
             if (rand() % 100 < 2) ch = '%';
             if (rand() % 100 < 2) ch = '?';
 
-            str.push_back(getMod()->getSettingValue<bool>("leave labels alone you dumb bitch")) ? asd[0] : ch);
+            str.push_back(getMod()->getSettingValue<bool>("leave labels alone you dumb bitch") ? asd[0] : ch);
         }
 
         CCLabelBMFont::setString(str.c_str());
