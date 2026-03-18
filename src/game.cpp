@@ -243,6 +243,60 @@ inline void SetupObjects() {
 	);
 	svcondtrigger->registerMe();
 
+	GameObjectsFactory::createObjectConfig(UNIQ_ID("player1-model"), "player1-model.png")
+		->tab(6)->resetObject(
+			[](GameObject* a) {
+				a->removeAllChildrenWithCleanup(false);
+				Ref g = GameManager::get()->m_gameLayer;
+				if (!g) return;
+				Ref player = g->m_player1;
+				if (!player) return;
+				Ref layer = player->m_mainLayer;
+				if (layer) {
+					layer->removeFromParentAndCleanup(false);
+					a->addChild(layer);
+					player->addChild(layer); //!!!
+				}
+			}
+		)->customSetup(
+			[](GameObject* a) {
+				if (a) a->m_addToNodeContainer = true;
+				a->m_objectType = GameObjectType::Decoration;
+				a->m_isDecoration = true;
+				a->m_isDecoration2 = true;
+				a->setDisplayFrame(a->m_editorEnabled ?
+					a->displayFrame() : CCSprite::createWithSpriteFrameName("30x30empty.png")->displayFrame()
+				);
+			}
+		)->registerMe();
+
+	GameObjectsFactory::createObjectConfig(UNIQ_ID("player2-model"), "player2-model.png")
+		->tab(6)->resetObject(
+			[](GameObject* a) {
+				a->removeAllChildrenWithCleanup(false);
+				Ref g = GameManager::get()->m_gameLayer;
+				if (!g) return;
+				Ref player = g->m_player2;
+				if (!player) return;
+				Ref layer = player->m_mainLayer;
+				if (layer) {
+					layer->removeFromParentAndCleanup(false);
+					a->addChild(layer);
+					player->addChild(layer); //!!!
+				}
+			}
+		)->customSetup(
+			[](GameObject* a) {
+				if (a) a->m_addToNodeContainer = true;
+				a->m_objectType = GameObjectType::Decoration;
+				a->m_isDecoration = true;
+				a->m_isDecoration2 = true;
+				a->setDisplayFrame(a->m_editorEnabled ?
+					a->displayFrame() : CCSprite::createWithSpriteFrameName("30x30empty.png")->displayFrame()
+				);
+			}
+		)->registerMe();
+
 	GameObjectsFactory::createTriggerConfig(UNIQ_ID("plr-tw-upd"), "plr-tw-upd.png")
 		->refID(1935)->insertIndex((12 * 5) + 5)->triggerObject(
 			[](EffectGameObject* ob, GJBaseGameLayer* g, int, gd::vector<int> const*) {
