@@ -1,5 +1,5 @@
 {
-	"geode": "5.5.3",
+	"geode": "5.7.1",
 	"early-load": true,
 	"gd": {
 		"win": "2.2081",
@@ -28,6 +28,18 @@
 		},
 		"alphalaneous.happy_textures": {
 			"version": ">=v2.0.7",
+			"required": false
+		},
+		"iandyhd3.infinite_inputs": {
+			"version": ">=v1.0.0",
+			"required": false
+		},
+		"undefined0.object_glow_in_editor": {
+			"version": ">=v1.0.0",
+			"required": false
+		},
+		"cvolton.misc_bugfixes": {
+			"version": ">=v1.0.0",
 			"required": false
 		}
 	},
@@ -58,12 +70,6 @@
 			"description": "add sounds to buttons that don't have them",
 			"type": "bool",
 			"default": true
-		},
-		"leave labels alone you dumb bitch": {
-			"name": "leave labels alone you dumb bitch",
-			"description": "she will see and stop breaking the labels. what is she even trying to say?",
-			"type": "bool",
-			"default": false
 		},
 		"past": {
 			"name": "past",
