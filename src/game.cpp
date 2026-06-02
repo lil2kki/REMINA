@@ -904,7 +904,6 @@ class $modify(LevelEditorLayerExt, LevelEditorLayer) {
 		LevelEditorLayer::onPlaytest();
 	}
 	virtual void playerTookDamage(PlayerObject * player) {
-		player->playDeathEffect();
 		LevelEditorLayer::playerTookDamage(player);
 	}
 };
