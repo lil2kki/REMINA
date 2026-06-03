@@ -33,14 +33,6 @@
 		"iandyhd3.infinite_inputs": {
 			"version": ">=v1.0.0",
 			"required": false
-		},
-		"undefined0.object_glow_in_editor": {
-			"version": ">=v1.0.0",
-			"required": false
-		},
-		"cvolton.misc_bugfixes": {
-			"version": ">=v1.0.0",
-			"required": false
 		}
 	},
 	"resources": {
