@@ -284,6 +284,7 @@ class $modify(DialogTrigger, DialogLayer) {
 					input->setFilter(" !\"#$ * &'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 					input->getInputNode()->m_allowedChars = " !\"#$ * &'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 					input->getInputNode()->m_textLabel->setWidth(input->getContentWidth() - 28.f);
+					input->getInputNode()->setUserObject("no-parse", CCNode::create());
 					input->setString(data->getID());
 					input->setPositionY(174.000f);
 					input->getBGSprite()->setContentHeight(350.000f);

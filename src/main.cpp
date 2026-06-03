@@ -75,6 +75,8 @@ $on_game(TexturesLoaded) {
 #include <Geode/modify/CCTextInputNode.hpp>
 class $modify(CCTextInputNodeExt, CCTextInputNode) {
 	virtual void textChanged() {
+		if (CCKeyboardDispatcher::get()->getControlKeyPressed()) return CCTextInputNode::textChanged();
+		if (getUserObject("no-parse")) return CCTextInputNode::textChanged();
 		std::string a = getString().c_str();
 		auto parse = matjson::parse(
 			string::replace(matjson::Value(a.c_str()).dump(), "\\\\", "\\")
