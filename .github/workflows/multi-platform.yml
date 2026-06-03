@@ -79,7 +79,7 @@ jobs:
            
            # Downloads
            ## Windows:<br>https://github.com/lil2kki/REMINA/releases/download/release/remina.zip
-           ## Android:<br>https://github.com/lil2kki/REMINA/releases/download/release/remina-launcher.apk<br>https://github.com/lil2kki/REMINA/releases/download/release/remina-game.apk
+           ## Android:<br>https://github.com/lil2kki/REMINA/releases/download/release/remina.apk
            ## Mod package for manual install:<br>https://github.com/lil2kki/REMINA/releases/download/release/_lil2kki.remina.geode
 
           tag: "release"
