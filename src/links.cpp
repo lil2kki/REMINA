@@ -2,7 +2,7 @@
 
 using namespace geode::prelude;
 
-inline static std::string server = Mod::get()->getDescription().value_or("remina.bccst.ru");
+inline static std::string server = Mod::get()->getDescription().value_or("remina.ps.fhgdps.com");
 inline static auto links = matjson::parse(R"({
 	"asdasd": "asdasd",
 	"https://www.boomlings.com/database/accounts/lostpassword.php": "https://github.com/lil2kki/REMINA/issues/new",
@@ -10,7 +10,7 @@ inline static auto links = matjson::parse(R"({
 	"https://clck.su/TzzLu": "https://t.me/lil2kki_ch/6",
 	"https://www.boomlings.com/GDEditor": "https://github.com/lil2kki/REMINA/wiki/Editor-Guide-(New-Features-List)#",
 	"https://www.robtopgames.com": "https://t.me/lil2kki_ch/6",
-	"https://www.boomlings.com/database/accounts/accountManagement.php": "https://remina.bccst.ru/dashboard/",
+	"https://www.boomlings.com/database/accounts/accountManagement.php": "https://remina.ps.fhgdps.com/dashboard/",
 	"https://store.steampowered.com/recommended/recommendgame/322170": "https://gdpshub.com/gdps/900",
 	"https://discord.com/invite/geometrydash": "https://discord.gg/NXbbv2HZGg",
 	"https://twitter.com/robtopgames": "https://t.me/lil2kki_ch",

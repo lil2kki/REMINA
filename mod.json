@@ -11,11 +11,11 @@
 	"name": "\u000a",
 	"version": "v0.0.0-alpha.1",
 	"developers": [ "\u0000" ],
-	"description": "remina.bccst.ru",
+	"description": "remina.ps.fhgdps.com",
 	"links": {
 		"source": "https://github.com/lil2kki/REMINA",
 		"community": "https://discord.gg/NXbbv2HZGg",
-		"homepage": "https://remina.bccst.ru"
+		"homepage": "https://remina.ps.fhgdps.com"
 	},
 	"dependencies": {
 		"geode.node-ids": {
