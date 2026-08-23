@@ -56,7 +56,7 @@ $on_game(TexturesLoaded) {
 		CCDelayTime::create(0.1f), CallFuncExt::create(
 			[mirrasovers] {
 				if (rand() % 100 < 10) return;
-				mirrasovers->setOpacity(110 + (rand() % 50));
+				mirrasovers->setOpacity(0 + (rand() % 20));
 				//hide all children, then show a random one
 				for (auto child : mirrasovers->getChildrenExt()) 
 					child->setVisible(false);
@@ -115,7 +115,7 @@ class $modify(MenuGameLayerExt, MenuGameLayer) {
 #include <Geode/modify/CCDirector.hpp>
 class $modify(voices, CCDirector) {
 	static void replay() {
-		if ((rand() % 100) > 35) return;
+		if ((rand() % 100) < 25) return;
 		//vars
 		auto vec = std::vector<std::string>();
 		auto name = fmt::format("Recording {}.ogg", 1);
