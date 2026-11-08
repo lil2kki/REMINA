@@ -7,13 +7,13 @@ inline static auto links = matjson::parse(R"({
 	"asdasd": "asdasd",
 	"https://www.boomlings.com/database/accounts/lostpassword.php": "https://github.com/lil2kki/REMINA/issues/new",
 	"https://www.boomlings.com/database/accounts/lostusername.php": "https://github.com/lil2kki/REMINA/issues/new",
-	"https://clck.su/TzzLu": "https://t.me/lil2kki_ch/6",
+	"https://clck.su/TzzLu": "https://t.me/thaLILNIKKI",
 	"https://www.boomlings.com/GDEditor": "https://github.com/lil2kki/REMINA/wiki/Editor-Guide-(New-Features-List)#",
-	"https://www.robtopgames.com": "https://t.me/lil2kki_ch/6",
+	"https://www.robtopgames.com": "https://t.me/thaLILNIKKI",
 	"https://www.boomlings.com/database/accounts/accountManagement.php": "https://remina.ps.fhgdps.com/dashboard/",
 	"https://store.steampowered.com/recommended/recommendgame/322170": "https://gdpshub.com/gdps/900",
 	"https://discord.com/invite/geometrydash": "https://discord.gg/NXbbv2HZGg",
-	"https://twitter.com/robtopgames": "https://t.me/lil2kki_ch",
+	"https://twitter.com/robtopgames": "https://t.me/thaLILNIKKI",
 	"https://www.youtube.com/user/RobTopGames": "https://www.youtube.com/channel/UCpgyf8EpL62WyDM2jWo4v1w"
 })").unwrapOrDefault();
 

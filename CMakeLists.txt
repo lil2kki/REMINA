@@ -31,10 +31,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     WIN32_LEAN_AND_MEAN
     _WINSOCK_DEPRECATED_NO_WARNINGS
 )
-target_compile_options(${PROJECT_NAME} PRIVATE 
--Wno-implicit-const-int-float-conversion 
--Wno-undefined-bool-conversion
-)
+# target_compile_options(${PROJECT_NAME} PRIVATE -Wno-implicit-const-int-float-conversion -Wno-undefined-bool-conversion)
 
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 

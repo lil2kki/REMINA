@@ -1,4 +1,4 @@
 # https://discord.gg/NXbbv2HZGg
-## https://t.me/lil2kki_ch
+## https://t.me/thaLILNIKKI
 
 https://remina.ps.fhgdps.com

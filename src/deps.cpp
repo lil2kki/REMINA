@@ -67,8 +67,8 @@ class $modify(NodeVisitController, CCNode) {
 		}
 		else if (Ref node = typeinfo_cast<CCLayerColor*>(this)) {
 			repl("#BF723EFF", "#00000000");//GJListLayer
-			repl("#A1582CFF", "#00000000");//LevelCell1
-			repl("#C2723EFF", "#00000000");//LevelCell2
+			repl("#A1582CFF", "#030303FF");//LevelCell1
+			repl("#C2723EFF", "#060606FF");//LevelCell2
 			//repl("", "");
 		}
 		else if (auto node = typeinfo_cast<CCRGBAProtocol*>(this)) {
@@ -76,7 +76,7 @@ class $modify(NodeVisitController, CCNode) {
 			repl("#969696FF", "#22111111");//background GJGarageLayer
 			repl("#334499FF", "#00000000");//chest_glow_bg_001.png
 			repl("#00388DFF", "#00000000");//level-search-bg
-			repl("#002762FF", "#00000000");//level-search-bar-bg
+			repl("#002762FF", "#090909FF");//level-search-bar-bg
 			repl("#002E75FF", "#00000000");//quick-search-bg
 			repl("#00245BFF", "#00000000");//difficulty-filters-bg
 			repl("#001F4FFF", "#00000000");//length-filters-bg
@@ -91,6 +91,15 @@ class $modify(NodeVisitController, CCNode) {
 			repl("#A1582CFF", "#00000000");//LevelCell1
 			repl("#C2723EFF", "#00000000");//LevelCell2
 			repl("#6C99D8FF", "#7A7A7AFF");//inputplaceholder
+			repl("#6C3C24FF", "#090909FF");//editor input
+			//input bg
+			auto isInpBgMaybe = false;
+			isInpBgMaybe = (node->getColor() == ccBLACK) and (node->getOpacity() == 90) ? true : isInpBgMaybe;
+			isInpBgMaybe = (node->getColor() == ccBLACK) and (node->getOpacity() == 100) ? true : isInpBgMaybe;
+			if (isInpBgMaybe) {
+				node->setColor(ccWHITE);
+				node->setOpacity(5);
+			}
 		};
 #undef repl
 	}

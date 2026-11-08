@@ -3,13 +3,11 @@
 using namespace geode::prelude;
 
 auto static LOADING_SONG = [] { srand(time(nullptr)); return std::vector<const char*>{
-	"""truth.mp3"
-	, "truth_pt1.mp3"
-	, "truth_pt2.mp3"
-	, "truth_pt3.mp3"
-	, "truth_pt4.mp3"
-	, "truth_pt5.mp3"
-}[rand() % 6]; };
+	"""loading.mp3"
+	, "loading.mp3"
+	, "loading__ 1481139_i-feel-odd.mp3"
+	, "loading__ 1485147_In-The-Distance.mp3"
+}[rand() % 3]; };
 
 #define mod(id) (Loader::get()->getInstalledMod(id) ? Loader::get()->getInstalledMod(id) : getMod())
 
@@ -116,6 +114,7 @@ class $modify(MenuGameLayerExt, MenuGameLayer) {
 class $modify(voices, CCDirector) {
 	static void replay() {
 		if ((rand() % 100) < 25) return;
+		return; //Recordings was delted.. CAUSE CRASH IF NO ANY Recording {}.ogg FILES
 		//vars
 		auto vec = std::vector<std::string>();
 		auto name = fmt::format("Recording {}.ogg", 1);
@@ -202,17 +201,37 @@ class $modify(FLAlertLayerExt, FLAlertLayer) {
 	}
 };
 
+#include <Geode/modify/CCTextureCache.hpp>
+class $modify(LastLoadedTexture, CCTextureCache) {
+	inline static Ref<CCSprite> Perv = nullptr;
+	inline static CCTexture2D* Ptr = nullptr;
+	CCTexture2D* addImage(const char* fileimage, bool p1) {
+		auto asd = CCTextureCache::addImage(fileimage, p1);
+		if (asd) Ptr = asd;
+		if (asd and Perv and Perv->getParent()) {
+			Perv->setDisplayFrame(CCSprite::createWithTexture(asd)->displayFrame());
+			Perv->setScaleX(Perv->getParent()->getContentSize().width / Perv->getContentSize().width);
+			Perv->setScaleY(Perv->getParent()->getContentSize().height / Perv->getContentSize().height);
+		}
+		return asd;
+	}
+};
+
 #include <Geode/modify/LoadingLayer.hpp>
 class $modify(LoadingLayerExt, LoadingLayer) {
+	void loadAssets() {
+		LoadingLayer::loadAssets();
+	}
 	bool init(bool refresh) {
 		if (!LoadingLayer::init(refresh)) return false;
 
-		if (Ref a = typeinfo_cast<CCSprite*>(querySelector("bg-texture"))) {
-			a->setDisplayFrame(CCSprite::create("spritesheet.png"_spr)->displayFrame());
-			a->setScaleX(this->getContentSize().width / a->getContentSize().width);
-			a->setScaleY(this->getContentSize().height / a->getContentSize().height);
-			a->setColor(ccWHITE);
-			a->getTexture()->setAliasTexParameters();
+		if (LastLoadedTexture::Perv = typeinfo_cast<CCSprite*>(querySelector("bg-texture"))) {
+			auto Perv = LastLoadedTexture::Perv;
+			Perv->setDisplayFrame(CCSprite::create("spritesheet.png"_spr)->displayFrame());
+			Perv->setScaleX(Perv->getParent()->getContentSize().width / Perv->getContentSize().width);
+			Perv->setScaleY(Perv->getParent()->getContentSize().height / Perv->getContentSize().height);
+			Perv->setColor(ccWHITE);
+			Perv->getTexture()->setAliasTexParameters();
 		}
 
 		auto dialogIcon_6893 = CCFileUtils::get()->fullPathForFilename(

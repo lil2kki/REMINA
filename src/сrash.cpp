@@ -1,4 +1,4 @@
-
+#include <.hpp>
 // even having all this inlcudes in geode im not sure about non-windows ones
 #include <signal.h>
 #ifdef GEODE_IS_WINDOWS
@@ -41,7 +41,7 @@ inline LONG WINAPI windowsExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) {
     );
 
     saveGame(crashInfo);
-    return EXCEPTION_CONTINUE_SEARCH;
+    return EXCEPTION_EXECUTE_HANDLER;
 }
 
 inline void signalHandler(int signal) {

@@ -441,38 +441,30 @@ inline void SetupObjects() {
 	GameObjectsFactory::createTriggerConfig(
 		UNIQ_ID("custom-shader"), "edit_eShaderBtn_001.png",
 		[](EffectGameObject* trigger, GJBaseGameLayer* game, int p1, gd::vector<int> const* p2)
-		{
-			auto url = trigger->m_particleString.c_str();
-			Ref program = CCShaderCache::sharedShaderCache()->programForKey(url);
-			if (program) {
-				if (Ref shaderLayer = game->m_shaderLayer) {
-					shaderLayer->m_sprite->setShaderProgram(program);
-				}
-				else log::error("game->m_shaderLayer = {}", game->m_shaderLayer);
-				program->updateUniforms();
-			}
-			else log::error("shader program ({}) = {}", url, game->m_shaderLayer);
-		},
+		{},
 		[](EditTriggersPopup* popup, EffectGameObject* trigger, CCArray* objects)
 		{
 			if (auto title = popup->getChildByType<CCLabelBMFont*>(0)) {
-				title->setString("\n \nApply Shader From URL\n (UNFINISHED)");
-				title->setAnchorPoint(CCPointMake(0.5f, 0.3f));
+				title->setString("Texture Container Object");
+				title->setAnchorPoint(CCPointMake(0.5f, 0.5f));
 			}
 			if (auto inf = popup->m_buttonMenu->getChildByType<InfoAlertButton*>(0)) {
 				//inf->setVisible(false);
-				inf->m_description = ""
-					"Activate this trigger at active shader to apply custom shader program from url on it.";
+				inf->m_description = "This object holds your texture with unique key"
+					" for further custom textured decoration objects. "
+					"Like you allocate resource here.";
 			}
 
-			auto input = TextInput::create(312.f, "fragment-shader.txt link", "chatFont.fnt");
+			auto input = TextInput::create(312.f, "key", "chatFont.fnt");
 			input->setFilter(" !\"#$ % &'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 			input->getInputNode()->m_allowedChars = " !\"#$ % &'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-			input->setString(trigger->m_particleString.c_str());
+			input->setString(matjson::parse(trigger->m_particleString).unwrapOrDefault()["key"].asString().unwrapOr("").c_str());
 			input->setPositionY(55.000f);
 			input->setCallback(
 				[trigger = Ref(trigger)](const std::string& p0) {
-					trigger->m_particleString = p0.c_str();
+					auto value = matjson::parse(trigger->m_particleString).unwrapOrDefault();
+					value["key"] = p0.c_str();
+					trigger->m_particleString = value.dump().c_str();
 				}
 			);
 			input->getBGSprite()->setContentHeight(40.000f);
@@ -481,72 +473,13 @@ inline void SetupObjects() {
 		}
 	)->saveString(
 		[](std::string str, GameObject* object, GJBaseGameLayer* level)
-		{
-			str += ",228,";
-			str += ZipUtils::base64URLEncode(object->m_particleString).c_str();
-			return str;
-		}
+		{ str += ",228,"; str += ZipUtils::base64URLEncode(object->m_particleString).c_str(); return str; }
 	)->objectFromVector(
 		[](GameObject* object, gd::vector<gd::string>& p0, gd::vector<void*>&, void*, bool)
-		{
-			object->m_particleString = ZipUtils::base64URLDecode(p0[228]).c_str();
-			return object;
-		}
+		{ object->m_particleString = ZipUtils::base64URLDecode(p0[228]).c_str(); return object; }
 	)->resetObject(
-		[](GameObject* object) {
-			std::string url = object->m_particleString.c_str();
-			if (CCShaderCache::sharedShaderCache()->programForKey(url.c_str())) return;
-			std::smatch matches;
-			if (std::regex_match(url, matches, std::regex(R"(^(https?)://([^/]+)(.*)$)"))) {
-				std::string scheme = matches[1];
-				std::string host = matches[2];
-				std::string path = matches[3].str();
-				if (path.empty()) path = "/";
-
-				log::info("Downloading: {}://{}{}", scheme, host, path);
-
-				std::shared_ptr<httplib::Client> cli;
-
-				cli = std::make_shared<httplib::Client>(host);
-
-				cli->set_follow_location(true);
-				cli->set_connection_timeout(30);
-				cli->set_read_timeout(30);
-
-				auto res = cli->Get(path.c_str());
-
-				if (!res) {
-					createQuickPopup(
-						"Failed to download:", httplib::to_string(res.error()), 
-						"OK", nullptr, nullptr
-					);
-					return log::error("Request failed: {}", httplib::to_string(res.error()));
-				}
-				if (res->status != 200) return log::error("HTTP error: {}", res->status);
-
-				log::info("Downloaded {} bytes", res->body.size());
-
-				Ref<CCGLProgram> program = new CCGLProgram();
-				program->initWithVertexShaderByteArray(R"(
-attribute vec4 a_position;
-attribute vec2 a_texCoord;
-attribute vec4 a_color;
-varying vec4 v_fragmentColor;
-varying vec2 v_texCoord;
-void main() {
-	gl_Position = CC_MVPMatrix * a_position;
-	v_fragmentColor = a_color;
-	v_texCoord = a_texCoord;
-})", res->body.c_str());
-				program->addAttribute(kCCAttributeNameColor, kCCVertexAttrib_Color);
-				program->addAttribute(kCCAttributeNamePosition, kCCVertexAttrib_Position);
-				program->addAttribute(kCCAttributeNameTexCoord, kCCVertexAttrib_TexCoords);
-				program->link();
-				program->updateUniforms();
-
-				CCShaderCache::sharedShaderCache()->addProgram(program, url.c_str());
-			}
-		}
+		[](GameObject* object)
+		{}
 	)->registerMe();
 }
 
