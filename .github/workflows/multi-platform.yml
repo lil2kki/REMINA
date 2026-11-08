@@ -62,6 +62,7 @@ jobs:
         id: build
         with:
           zstd: false
+          optimize-pngs: false
         
       - name: "Upload artifact"
         uses: actions/upload-artifact@v4
